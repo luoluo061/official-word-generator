@@ -8,7 +8,19 @@ The reference production profile is:
 
 Do not start a new profile from an empty folder. Copy the reference structure first, then adapt it.
 
-## 1. Review the Word feature catalog
+## 1. Capture user document requirements
+
+Start from the user's document type and office scenario. Codex should ask only when necessary, then map natural-language needs to `feature_id` values.
+
+Examples:
+
+- "要封面、目录、页码、图片图题" -> `structure.cover`, `toc.insert_field`, `page_number.odd_even_official` or `page_number.centered`, `image.insert_inline`, `caption.figure`
+- "要签署页" -> `structure.signature_block`
+- "要附件" -> `structure.appendix`
+
+Planned features may be recorded for future design, but cannot be treated as production capabilities.
+
+## 2. Review the Word feature catalog
 
 Before creating a profile, list the current Word capability pool:
 
@@ -26,7 +38,7 @@ py scripts\list_features.py --markdown
 
 All profile features must reference `feature_id` values from `references/feature_catalog.md`. Do not invent template behavior from memory.
 
-## 2. Choose `profile_id`
+## 3. Choose `profile_id`
 
 Use a stable lowercase snake_case id:
 
@@ -39,7 +51,7 @@ The folder must be:
 profiles/<profile_id>/
 ```
 
-## 3. Create the draft profile scaffold
+## 4. Create the draft profile scaffold
 
 Use the scaffold command instead of manually creating folders:
 
@@ -66,7 +78,7 @@ expected_validation_report.md
 feature_selection.md
 ```
 
-## 4. Copy/reference structure
+## 5. Copy/reference structure
 
 Start from:
 
@@ -89,7 +101,7 @@ feature_selection.md
 
 If the profile does not yet have an approved Word template, keep it as `draft` and use `template_placeholder.md`.
 
-## 5. Select features from `feature_selection.md`
+## 6. Select features from `feature_selection.md`
 
 Read:
 
@@ -115,7 +127,7 @@ Feature status meanings:
 
 Do not mark a profile as `production` if it depends on `planned` features for formal delivery.
 
-## 6. Configure `features.json`
+## 7. Configure `features.json`
 
 `features.json` declares which capabilities the profile enables.
 
@@ -146,7 +158,29 @@ Example:
 }
 ```
 
-## 7. Configure `format_rules.json`
+## 8. Generate a candidate `template.docx`
+
+If the user does not provide a Word template, Codex may create a draft candidate from the reference profile:
+
+```powershell
+py scripts\create_template_docx.py --profile <profile_id> --from general_official
+```
+
+This creates:
+
+```text
+profiles/<profile_id>/template.docx
+profiles/<profile_id>/template_build_report.md
+```
+
+Rules:
+
+- Do not overwrite an existing `template.docx` unless the user explicitly requests `--force`.
+- Generated templates are draft candidates only.
+- Planned features are reported as skipped/planned; they are not production capabilities.
+- Run `validate_profile.py` after generating the template.
+
+## 9. Configure `format_rules.json`
 
 `format_rules.json` records page and style expectations for the profile.
 
@@ -161,7 +195,7 @@ Include:
 
 If the current generator cannot consume a profile-specific rule yet, still document it here and mark the related feature as `partial` or `planned` in the catalog.
 
-## 8. Configure `validation_rules.json`
+## 10. Configure `validation_rules.json`
 
 `validation_rules.json` declares what must be checked before delivery.
 
@@ -183,7 +217,7 @@ Use implemented validation features when possible:
 
 If a profile needs rules that are not implemented, keep it as `draft`.
 
-## 9. Prepare `template.docx`
+## 11. Prepare or refine `template.docx`
 
 Before using a template in production:
 
@@ -202,7 +236,7 @@ py scripts\inspect_template.py --template profiles\<profile_id>\template.docx --
 
 Do not use a content document as a template without inspection.
 
-## 10. Prepare `example.md`
+## 12. Prepare `example.md`
 
 Every profile needs a representative Markdown example.
 
@@ -217,7 +251,7 @@ It should cover:
 
 This example is the regression input for future changes.
 
-## 11. Validate profile configuration
+## 13. Validate profile configuration
 
 Before inspecting or generating Word output, validate profile configuration:
 
@@ -233,7 +267,7 @@ py scripts\validate_profile.py --all
 
 If `OK: False`, fix `blocking_errors` before continuing. Warnings may be acceptable for draft profiles, but must be reviewed before production.
 
-## 12. Run inspect / generate / validate document
+## 14. Run inspect / generate / validate document
 
 List profiles:
 
@@ -265,7 +299,11 @@ Save the accepted report as:
 profiles/<profile_id>/expected_validation_report.md
 ```
 
-## 13. Promote draft to production
+## 15. Human visual review
+
+Before production, the user must open the generated Word document and inspect office suitability: page flow, table readability, title layout, TOC behavior, page numbers, and any profile-specific elements.
+
+## 16. Promote draft to production
 
 A profile may be promoted from `draft` to `production` only when all conditions are met:
 

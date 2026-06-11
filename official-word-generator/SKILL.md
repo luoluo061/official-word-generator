@@ -33,11 +33,14 @@ When the user asks to add a new template:
 
 1. First show or generate the Word feature capability list from `references/feature_catalog.md`.
 2. Do not hard-code template capabilities; select existing `feature_id` values.
-3. If the user has not specified exact features, create a draft profile from `general_official` and generate `feature_selection.md` for confirmation.
+3. Help map the user's natural-language requirements to `feature_id` values.
 4. Use `scripts/create_profile.py` rather than manually creating a profile directory.
-5. Planned features cannot be treated as production delivery capabilities.
-6. A production profile must include an approved template, `features.json`, `format_rules.json`, `validation_rules.json`, `example.md`, and `expected_validation_report.md`.
-7. Run `scripts/validate_profile.py` before inspecting, generating, or promoting a profile.
+5. If the user has not specified exact features, create a draft profile from `general_official` and generate `feature_selection.md` for confirmation.
+6. If the user does not provide a Word template, Codex may use `scripts/create_template_docx.py` to generate a draft `template.docx` candidate from a reference profile.
+7. Automatically generated `template.docx` files are draft candidates only.
+8. Planned features cannot be treated as production delivery capabilities.
+9. A production profile must include an approved template, `features.json`, `format_rules.json`, `validation_rules.json`, `example.md`, and `expected_validation_report.md`.
+10. Run `scripts/validate_profile.py` before inspecting, generating, or promoting a profile.
 
 When the user asks to upgrade a profile to production:
 
@@ -111,6 +114,12 @@ Create a draft profile from the reference profile:
 
 ```powershell
 py scripts\create_profile.py --profile project_application --name 项目申报书 --from general_official
+```
+
+Create a draft template candidate when no Word template is provided:
+
+```powershell
+py scripts\create_template_docx.py --profile project_application --from general_official
 ```
 
 Validate profile configuration:

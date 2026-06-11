@@ -275,6 +275,7 @@ def add_table_of_contents(doc: Document) -> None:
 
 
 def update_fields_with_word(docx_path: Path) -> list[str]:
+    docx_path = docx_path.resolve()
     warnings: list[str] = []
     try:
         ensure_dependencies(["win32com.client"])

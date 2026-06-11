@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-06-11 Template Candidate Builder
+
+- Added `scripts/create_template_docx.py` for draft template.docx candidate generation from a reference profile.
+- Updated profile scaffolding guidance for the human -> Codex -> skill template creation workflow.
+- Fixed Word field updates to use absolute `.docx` paths.
+
 ## 2026-06-11 Table Font Update
 
 - Updated general official table header/body text to 仿宋_GB2312 3号.

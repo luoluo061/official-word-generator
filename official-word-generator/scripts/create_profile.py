@@ -68,6 +68,7 @@ def render_feature_selection(features: list[Feature], reference_features: dict, 
         f"- profile_id: `{profile_id}`",
         "- purpose: review and edit this checklist before finalizing `features.json`.",
         "- note: implemented features may be enabled; partial features require review; planned features are listed for future planning and should not be enabled for production.",
+        "- workflow: human requirements -> Codex maps to feature_id -> update features.json -> create_template_docx.py builds template.docx candidate.",
         "",
     ]
     current = None
@@ -246,9 +247,10 @@ def main() -> None:
 
     print(f"Created draft profile: {target_dir}")
     print("Next steps:")
+    print("- Run list_features.py --markdown to review available Word capabilities.")
     print("- Review feature_selection.md.")
     print("- Adjust features.json using feature_id values from references/feature_catalog.md.")
-    print("- Replace template_placeholder.md with template.docx or configure a stable template path.")
+    print(f"- Run create_template_docx.py --profile {args.profile} --from {args.source_profile} to create a draft template.docx candidate.")
     print("- Update format_rules.json and validation_rules.json.")
     print("- Run profile_resolver.py --inspect, generate_docx.py --profile, and validate_docx.py --profile.")
 

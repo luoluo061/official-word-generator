@@ -27,6 +27,12 @@ Each profile may contain:
 
 Before adding a new profile or changing profile behavior, read `references/feature_catalog.md` and select feature IDs from that catalog. Do not hard-code profile-specific behavior in this file.
 
+Profile status rules:
+
+- `production`: Can be used for formal generation and delivery after validation passes.
+- `draft`: Can be used for test generation; warn the user before any delivery.
+- `planned`: Design placeholder only; do not use as a formal output template.
+
 ## Profile Selection
 
 1. If the user explicitly names a document type or template, use the matching profile.
@@ -60,6 +66,18 @@ Before adding a new profile or changing profile behavior, read `references/featu
 
 ## Existing Command Surface
 
+List profiles:
+
+```powershell
+py scripts\profile_resolver.py --list
+```
+
+Inspect a profile:
+
+```powershell
+py scripts\profile_resolver.py --profile general_official --inspect
+```
+
 Install or verify dependencies:
 
 ```powershell
@@ -74,7 +92,13 @@ py scripts\prepare_content.py --input path\to\input.txt --output path\to\content
 
 Do not trust PowerShell `Get-Content` output for Chinese text display. It can render UTF-8 files as mojibake depending on console encoding. Use `prepare_content.py` or Python UTF-8 reads when checking content.
 
-Generate a Word document:
+Recommended profile-based generation:
+
+```powershell
+py scripts\generate_docx.py --profile general_official --content path\to\content.md --output path\to\output.docx --report path\to\validation_report.md
+```
+
+Compatible template-based generation:
 
 ```powershell
 py scripts\generate_docx.py --template path\to\template.docx --content path\to\content.md --output path\to\output.docx --report path\to\validation_report.md
@@ -106,13 +130,19 @@ Validate an output document:
 py scripts\validate_docx.py --docx path\to\output.docx --output path\to\validation_report.md
 ```
 
+Profile-aware validation:
+
+```powershell
+py scripts\validate_docx.py --profile general_official --docx path\to\output.docx --output path\to\validation_report.md
+```
+
 ## Required Behavior
 
 - Prefer selected profile rules over global defaults.
 - Prefer approved profile templates over arbitrary `.docx` files.
 - For general official documents, default to `profiles/general_official/` and `assets/base-official-template.docx`.
 - Do not use an arbitrary content document as the template just because it is `.docx`; inspect it first.
-- When the user changes formatting for a profile, update the profile config first. If the current generator still reads `references/format_rules.md`, keep that file in sync until profile-aware script support is implemented.
+- When the user changes formatting for a profile, update the profile config first. If the current generator still needs `references/format_rules.md` compatibility, keep that file in sync.
 - Keep all Python, Markdown, and JSON files UTF-8.
 - Use `pathlib.Path` for paths, especially Chinese paths and filenames.
 - Do not use `.doc` as the working template. Convert `.doc` to `.docx` first.
@@ -122,7 +152,7 @@ py scripts\validate_docx.py --docx path\to\output.docx --output path\to\validati
 
 ## Current Implementation Notes
 
-The current scripts are not yet fully profile-aware. They already support the `general_official` production path and can use a template plus `references/format_rules.md`. The profile directory is the design/configuration layer for expanding the skill without rewriting logic each time.
+The scripts now support profile resolution for template/rule selection and profile-aware validation metadata. The `general_official` profile is the current production path. Draft/planned profiles can be inspected and tested only when a usable template exists.
 
 Implemented or partially implemented today:
 
@@ -141,9 +171,8 @@ Implemented or partially implemented today:
 
 Planned profile-aware work:
 
-- Loading `profiles/<profile_id>/features.json` directly in scripts.
-- Loading profile `format_rules.json` directly in scripts.
-- Loading profile `validation_rules.json` directly in scripts.
+- Enforcing feature flags in generation logic, not only reporting them.
+- Full dynamic validation for every profile-specific rule.
 - Template-specific page number modes.
 - Software copyright cover/TOC/body structure.
 - Contract signature blocks, appendix rules, and clause numbering.

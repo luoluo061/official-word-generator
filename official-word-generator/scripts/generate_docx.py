@@ -26,6 +26,7 @@ from docx.shared import Inches, Pt, RGBColor
 from lxml import etree
 
 from markdown_parser import Block, parse_markdown  # noqa: E402
+from profile_resolver import ProfileError, resolve_profile  # noqa: E402
 from text_io import read_text_safely  # noqa: E402
 from validate_docx import validate_document  # noqa: E402
 
@@ -78,6 +79,8 @@ def load_format_rules(rules_path: Path | None = None) -> dict:
         rules_path = SCRIPT_DIR.parent / "references" / "format_rules.md"
     if not rules_path.exists():
         return DEFAULT_RULES
+    if rules_path.suffix.lower() == ".json":
+        return load_format_rules_json(rules_path)
     text = read_text_safely(rules_path)
     match = re.search(r"```json\s*(\{.*?\})\s*```", text, flags=re.DOTALL)
     if not match:
@@ -90,6 +93,43 @@ def load_format_rules(rules_path: Path | None = None) -> dict:
     for key, value in loaded.get("styles", {}).items():
         if key in merged["styles"] and isinstance(value, dict):
             merged["styles"][key].update(value)
+    return merged
+
+
+def load_format_rules_json(rules_path: Path) -> dict:
+    try:
+        loaded = json.loads(rules_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return DEFAULT_RULES
+
+    merged = json.loads(json.dumps(DEFAULT_RULES, ensure_ascii=False))
+    raw_styles = loaded.get("styles", {})
+    key_map = {
+        "title": "title",
+        "body": "body",
+        "level_1": "h1",
+        "h1": "h1",
+        "level_2": "h2",
+        "h2": "h2",
+        "figure_caption": "figure_caption",
+        "table_caption": "table_caption",
+        "table_body": "table_body",
+        "table_header": "table_header",
+        "note": "note",
+    }
+    field_map = {
+        "font": "east_asia",
+        "ascii_font": "ascii",
+        "alignment": "align",
+    }
+    for source_key, target_key in key_map.items():
+        value = raw_styles.get(source_key)
+        if not isinstance(value, dict) or target_key not in merged["styles"]:
+            continue
+        normalized = {}
+        for key, item in value.items():
+            normalized[field_map.get(key, key)] = item
+        merged["styles"][target_key].update(normalized)
     return merged
 
 
@@ -363,7 +403,7 @@ def add_image(doc: Document, block: Block, content_dir: Path, missing_images: li
         add_text_paragraph(doc, block.caption, resolve_style(doc, "figure_caption"), align=WD_ALIGN_PARAGRAPH.CENTER, first_line_chars=0)
 
 
-def add_table(doc: Document, block: Block) -> None:
+def add_table(doc: Document, block: Block, rules: dict) -> None:
     rows = block.rows or []
     if not rows:
         return
@@ -387,7 +427,7 @@ def add_table(doc: Document, block: Block) -> None:
                 set_first_line_chars(paragraph, 0)
                 for run in paragraph.runs:
                     rule_key = "table_header" if r_idx == 0 else "table_body"
-                    rule = load_format_rules()["styles"].get(rule_key, DEFAULT_RULES["styles"][rule_key])
+                    rule = rules["styles"].get(rule_key, DEFAULT_RULES["styles"][rule_key])
                     set_run_font(
                         run,
                         rule.get("east_asia", FONT_BODY),
@@ -468,7 +508,16 @@ def set_three_line_table_borders(table) -> None:
             bottom.set(qn("w:color"), "000000")
 
 
-def generate_docx(template_path: Path, content_path: Path, output_path: Path, report_path: Path | None = None, rules_path: Path | None = None, update_fields: bool = False) -> dict:
+def generate_docx(
+    template_path: Path,
+    content_path: Path,
+    output_path: Path,
+    report_path: Path | None = None,
+    rules_path: Path | None = None,
+    update_fields: bool = False,
+    profile_id: str | None = None,
+    profile_info: dict | None = None,
+) -> dict:
     if template_path.suffix.lower() != ".docx":
         raise ValueError("Template must be .docx. Convert .doc to .docx before using this skill.")
 
@@ -501,7 +550,7 @@ def generate_docx(template_path: Path, content_path: Path, output_path: Path, re
         elif block.type == "image":
             add_image(doc, block, content_path.parent, missing_images)
         elif block.type == "table":
-            add_table(doc, block)
+            add_table(doc, block, rules)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     doc.save(output_path)
@@ -509,7 +558,7 @@ def generate_docx(template_path: Path, content_path: Path, output_path: Path, re
     field_warnings = update_fields_with_word(output_path) if update_fields else []
     if update_fields and not field_warnings:
         normalize_after_word_field_update(output_path)
-    result = validate_document(output_path, report_path, content_path)
+    result = validate_document(output_path, report_path, content_path, profile_id=profile_id, profile_info=profile_info)
     if missing_images or field_warnings:
         result.setdefault("warnings", []).extend(f"Missing image: {path}" for path in missing_images)
         result.setdefault("warnings", []).extend(field_warnings)
@@ -522,14 +571,38 @@ def generate_docx(template_path: Path, content_path: Path, output_path: Path, re
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate a Word docx from a template and Markdown content.")
-    parser.add_argument("--template", required=True, type=Path)
+    parser.add_argument("--profile", help="Optional document profile id. Resolves template and rules from profiles/<profile_id>.")
+    parser.add_argument("--template", type=Path)
     parser.add_argument("--content", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--report", type=Path)
     parser.add_argument("--rules", type=Path, help="Optional format_rules.md path. Defaults to the skill references file.")
     parser.add_argument("--update-fields", action="store_true", help="Use local Microsoft Word to update TOC/page fields after saving.")
     args = parser.parse_args()
-    generate_docx(args.template, args.content, args.output, args.report, args.rules, args.update_fields)
+
+    profile_info = None
+    template_path = args.template
+    rules_path = args.rules
+    if args.profile:
+        try:
+            profile_info = resolve_profile(args.profile)
+        except ProfileError as exc:
+            parser.error(str(exc))
+        if template_path is None:
+            resolved_template = Path(profile_info["template_path"])
+            if not profile_info["template_is_docx"] or not resolved_template.exists():
+                parser.error(
+                    f"Profile '{args.profile}' does not have a usable template.docx. "
+                    f"Status: {profile_info['status']}; template: {resolved_template}"
+                )
+            template_path = resolved_template
+        if rules_path is None:
+            rules_path = Path(profile_info["generator_rules_path"])
+
+    if template_path is None:
+        parser.error("Either --template or --profile with a usable template.docx is required.")
+
+    generate_docx(template_path, args.content, args.output, args.report, rules_path, args.update_fields, args.profile, profile_info)
 
 
 if __name__ == "__main__":

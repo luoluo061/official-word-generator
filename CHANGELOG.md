@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-06-11 Profile Execution
+
+- Added `scripts/profile_resolver.py` for profile listing, inspection, and resolution.
+- Added `--profile` support to generation and validation commands.
+- Added profile status and feature-status reporting to validation reports.
+- Preserved legacy `--template` generation flow.
+
 ## 2026-06-11
 
 - Updated level-1 heading (`一级标题`) to use 黑体 3号 without bold.

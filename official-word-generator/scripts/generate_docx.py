@@ -67,8 +67,8 @@ DEFAULT_RULES = {
         "h2": {"style_name": "二级标题", "east_asia": FONT_L2, "ascii": FONT_ASCII, "size_pt": 16, "bold": False, "first_line_chars": 2, "align": "left", "line_rule": "exact", "line_pt": 28, "outline_level": 1},
         "figure_caption": {"style_name": "图题", "east_asia": FONT_BODY, "ascii": FONT_ASCII, "size_pt": 16, "bold": False, "first_line_chars": 0, "align": "center", "line_rule": "exact", "line_pt": 28},
         "table_caption": {"style_name": "表题", "east_asia": FONT_BODY, "ascii": FONT_ASCII, "size_pt": 16, "bold": False, "first_line_chars": 0, "align": "center", "line_rule": "exact", "line_pt": 28},
-        "table_body": {"style_name": "表格正文", "east_asia": FONT_BODY, "ascii": FONT_ASCII, "size_pt": 10.5, "bold": False, "first_line_chars": 0, "align": "center", "line_rule": "single", "line_pt": 0},
-        "table_header": {"style_name": "表格表头", "east_asia": FONT_HEI, "ascii": FONT_ASCII, "size_pt": 10.5, "bold": True, "first_line_chars": 0, "align": "center", "line_rule": "single", "line_pt": 0},
+        "table_body": {"style_name": "表格正文", "east_asia": FONT_BODY, "ascii": FONT_ASCII, "size_pt": 16, "bold": False, "first_line_chars": 0, "align": "center", "line_rule": "single", "line_pt": 0},
+        "table_header": {"style_name": "表格表头", "east_asia": FONT_BODY, "ascii": FONT_ASCII, "size_pt": 16, "bold": True, "first_line_chars": 0, "align": "center", "line_rule": "single", "line_pt": 0},
         "note": {"style_name": "备注", "east_asia": FONT_BODY, "ascii": FONT_ASCII, "size_pt": 16, "bold": False, "first_line_chars": 0, "align": "left", "line_rule": "exact", "line_pt": 28},
     }
 }
@@ -431,7 +431,7 @@ def add_table(doc: Document, block: Block, rules: dict) -> None:
                     set_run_font(
                         run,
                         rule.get("east_asia", FONT_BODY),
-                        float(rule.get("size_pt", 10.5)),
+                        float(rule.get("size_pt", 16)),
                         bold=bool(rule.get("bold", False)),
                         ascii_font=rule.get("ascii", FONT_ASCII),
                     )

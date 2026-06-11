@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-06-11 Table Font Update
+
+- Updated general official table header/body text to 仿宋_GB2312 3号.
+- Set table header bold and table body non-bold.
+- Documented that generated outputs should go to user-selected/Desktop folders, not the skill directory.
+
 ## 2026-06-11 Profile Validation
 
 - Added `scripts/validate_profile.py` for profile configuration integrity checks.

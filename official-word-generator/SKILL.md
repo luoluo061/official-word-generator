@@ -187,6 +187,7 @@ py scripts\validate_docx.py --profile general_official --docx path\to\output.doc
 - When the user changes formatting for a profile, update the profile config first. If the current generator still needs `references/format_rules.md` compatibility, keep that file in sync.
 - Keep all Python, Markdown, and JSON files UTF-8.
 - Use `pathlib.Path` for paths, especially Chinese paths and filenames.
+- Do not write generated `.docx` or validation reports into the skill directory. Use the user's specified output folder; if none is specified, use a Desktop/workspace output folder such as `F:\USER\Desktop\wordgen`.
 - Do not use `.doc` as the working template. Convert `.doc` to `.docx` first.
 - Generate with `python-docx`; use Word COM only for conversion, PDF export, field/TOC updates, or Word-engine verification.
 - Reopen generated `.docx` and verify styles, page setup, indentation, page footers, tables, and profile-specific requirements before claiming completion.

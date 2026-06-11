@@ -59,6 +59,28 @@
       "line_pt": 28,
       "first_line_chars": 2,
       "outline_level": 2
+    },
+    "table_body": {
+      "style_name": "????",
+      "font": "??_GB2312",
+      "ascii_font": "Times New Roman",
+      "size_pt": 16,
+      "bold": false,
+      "alignment": "center",
+      "line_rule": "single",
+      "line_pt": 0,
+      "first_line_chars": 0
+    },
+    "table_header": {
+      "style_name": "????",
+      "font": "??_GB2312",
+      "ascii_font": "Times New Roman",
+      "size_pt": 16,
+      "bold": true,
+      "alignment": "center",
+      "line_rule": "single",
+      "line_pt": 0,
+      "first_line_chars": 0
     }
   }
 }

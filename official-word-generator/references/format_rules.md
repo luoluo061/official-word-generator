@@ -138,8 +138,11 @@
 | Word 表格样式 | 优先使用模板表格样式，否则使用 `Table Grid` |
 | 表格对齐 | 居中 |
 | 表格内容字体 | 仿宋_GB2312 |
-| 表格内容字号 | 10.5 磅或模板默认 |
-| 表头 | 可加粗 |
+| 表格表头字体 | 仿宋_GB2312 |
+| 表格表头字号 | 3号 / 16 磅 |
+| 表格表头 | 加粗 |
+| 表格正文字体 | 仿宋_GB2312 |
+| 表格正文字号 | 3号 / 16 磅 |
 | 表题样式 | `表题` |
 
 ## 八、页码格式标准
@@ -261,10 +264,10 @@
       "line_pt": 28
     },
     "table_body": {
-      "style_name": "????",
-      "east_asia": "??_GB2312",
+      "style_name": "表格正文",
+      "east_asia": "仿宋_GB2312",
       "ascii": "Times New Roman",
-      "size_pt": 10.5,
+      "size_pt": 16,
       "bold": false,
       "first_line_chars": 0,
       "align": "center",
@@ -272,10 +275,10 @@
       "line_pt": 0
     },
     "table_header": {
-      "style_name": "????",
-      "east_asia": "??",
+      "style_name": "表格表头",
+      "east_asia": "仿宋_GB2312",
       "ascii": "Times New Roman",
-      "size_pt": 10.5,
+      "size_pt": 16,
       "bold": true,
       "first_line_chars": 0,
       "align": "center",

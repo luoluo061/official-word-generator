@@ -1,0 +1,18 @@
+{
+  "profile_id": "contract",
+  "status": "draft",
+  "required_checks": [
+    "validation.basic_open",
+    "validation.required_styles",
+    "validation.profile_rules",
+    "validation.visual_review"
+  ],
+  "planned_checks": [
+    "contract title exists",
+    "party information block exists when required",
+    "clause headings follow the selected numbering rule",
+    "signature block exists when structure.signature_block is enabled",
+    "appendix section exists when structure.appendix is enabled",
+    "page numbers follow the contract template rule"
+  ]
+}

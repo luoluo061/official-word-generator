@@ -1,30 +1,64 @@
 ---
 name: official-word-generator
-description: Use when generating formatted Word `.docx` documents from a user-provided Word template and Markdown content, especially Chinese official-style documents where template styles, fonts, heading levels, page setup, captions, and validation reports must be preserved or checked.
+description: Use when generating, formatting, inspecting, or validating formal Word `.docx` documents from templates and Markdown/content sources. Supports profile-based document types such as general official documents, software copyright manuals, contracts, reports, and meeting minutes, with reusable Word templates, format rules, feature flags, and validation rules.
 ---
 
-# Word Template Generator
+# Official Word Generator
 
-Use this skill when the user provides or asks to use:
+This skill standardizes formal Word document production. It is not a single-purpose official-document generator; it is a profile-driven workflow for applying Word templates, formatting rules, feature choices, and validation rules across multiple document types.
 
-- a Word template file such as `template.docx`
-- Markdown content such as `content.md`
-- a request to generate a formatted `.docx` using the template
-- a request to inspect or validate Word template formatting
+Primary responsibility: Word document generation, template application, format control, and validation. Do not turn this skill into a broad writing model. Codex may help create or revise Markdown content when needed, but the core output workflow is still `.md` or normalized content -> `.docx` -> validation report.
 
-The skill's job is document production, not substantive writing. Codex may help create or revise `content.md`, then this skill turns it into Word using the template.
+## Profile Model
 
-## Workflow
+The skill has one workflow and multiple document profiles:
 
-1. Confirm inputs. If the source content is pasted text, `.txt`, `.md`, or a content `.docx`, normalize it with `scripts/prepare_content.py` first.
-2. Read `references/format_rules.md` for default formatting rules when formatting matters.
-3. Read `references/markdown_mapping.md` if heading, image, table, or quote mapping is unclear.
-4. Run `scripts/inspect_template.py` when the template is unfamiliar or the user asks what format it contains.
-5. Run `scripts/generate_docx.py` to create the Word document.
-6. Run `scripts/validate_docx.py` or use `--report` from `generate_docx.py` to produce a validation report.
-7. Report the output `.docx` path and validation report path.
+- `profiles/general_official/`: 一般公文; current production-ready base profile.
+- `profiles/software_copyright/`: 软著说明书; design profile, requires an approved template before production use.
+- `profiles/contract/`: 合同; design profile, requires an approved template before production use.
 
-## Commands
+Each profile may contain:
+
+- `profile.md`: purpose, scenarios, default logic, current status.
+- `features.json`: enabled/disabled/overridable `feature_id` values.
+- `format_rules.json`: profile-specific format rules or placeholders.
+- `validation_rules.json`: profile-specific validation expectations.
+- `template.docx` or `template_placeholder.md`: approved template or template status.
+
+Before adding a new profile or changing profile behavior, read `references/feature_catalog.md` and select feature IDs from that catalog. Do not hard-code profile-specific behavior in this file.
+
+## Profile Selection
+
+1. If the user explicitly names a document type or template, use the matching profile.
+2. If the document type is obvious from the request, select the profile and state the basis briefly.
+3. If the document type is unclear, list available profiles and ask the user to choose.
+4. If the user uploads a custom template, inspect it first and treat it as a temporary custom profile unless it is promoted into `profiles/`.
+5. If the user requests feature overrides, apply those overrides on top of the selected profile only when the feature is marked overridable in `features.json`.
+6. If a profile references only `template_placeholder.md`, do not claim it is production-ready. Either ask for an approved template or use `general_official` only with an explicit limitation.
+
+## Core Workflow
+
+1. Determine profile:
+   - Read the selected `profiles/<profile_id>/profile.md`.
+   - Read `profiles/<profile_id>/features.json`.
+   - Read profile `format_rules.json` and `validation_rules.json` when relevant.
+2. Confirm inputs:
+   - Template `.docx`, Markdown `.md`, pasted text, `.txt`, content `.docx`, or user-provided custom template.
+3. Normalize content when needed:
+   - Use `scripts/prepare_content.py` for pasted text, `.txt`, `.md`, or content `.docx`.
+4. Inspect unfamiliar templates:
+   - Use `scripts/inspect_template.py` before using a user-uploaded template or promoting a template into a profile.
+5. Generate the Word document:
+   - Use `scripts/generate_docx.py`.
+6. Validate the output:
+   - Use `--report` from `generate_docx.py` or run `scripts/validate_docx.py`.
+7. Report:
+   - Output `.docx` path.
+   - Validation report path.
+   - Selected profile and any feature overrides.
+   - Any planned/partial feature limitations.
+
+## Existing Command Surface
 
 Install or verify dependencies:
 
@@ -38,16 +72,7 @@ Normalize pasted text, Markdown, or a content Word file into UTF-8 Markdown:
 py scripts\prepare_content.py --input path\to\input.txt --output path\to\content.md
 ```
 
-Do not trust PowerShell `Get-Content` output for Chinese text display. It can render UTF-8 correctly stored files as mojibake depending on console encoding. Use `prepare_content.py` or Python UTF-8 reads when checking content.
-
-Required runtime:
-
-- Python 3.10+ recommended.
-- `python-docx` for reading/writing `.docx`.
-- `lxml` for strict OOXML validation and normalization.
-- `pywin32` on Windows when using `--update-fields` to ask Microsoft Word to refresh TOC/page fields.
-
-The entry scripts automatically install missing Python packages into the active Python environment with `python -m pip install ...`. If the environment cannot access the internet or cannot write to site-packages, install from `requirements.txt` manually before use.
+Do not trust PowerShell `Get-Content` output for Chinese text display. It can render UTF-8 files as mojibake depending on console encoding. Use `prepare_content.py` or Python UTF-8 reads when checking content.
 
 Generate a Word document:
 
@@ -55,7 +80,7 @@ Generate a Word document:
 py scripts\generate_docx.py --template path\to\template.docx --content path\to\content.md --output path\to\output.docx --report path\to\validation_report.md
 ```
 
-Use a custom rules Markdown file:
+Use a custom rules Markdown file supported by the current generator:
 
 ```powershell
 py scripts\generate_docx.py --template path\to\template.docx --content path\to\content.md --output path\to\output.docx --report path\to\validation_report.md --rules path\to\format_rules.md
@@ -67,7 +92,7 @@ Generate with a Word table of contents:
 py scripts\generate_docx.py --template path\to\template.docx --content path\to\content.md --output path\to\output.docx --report path\to\validation_report.md --update-fields
 ```
 
-Put `[TOC]` or `[[TOC]]` in the Markdown where the table of contents should appear. The generator inserts page breaks so the cover, TOC, and body start on separate pages. The TOC includes only level-1 and level-2 headings; third/fourth-level items stay in the body but do not appear in the TOC. If Microsoft Word/pywin32 is unavailable, the TOC field is still inserted, but the user must update fields in Word/WPS to render final entries and page numbers.
+Put `[TOC]` or `[[TOC]]` in Markdown where the table of contents should appear. The current generator inserts a Word TOC field for heading levels 1-2 and page breaks around the TOC. If Microsoft Word/pywin32 is unavailable, the TOC field is inserted but final entries/page numbers must be updated in Word/WPS.
 
 Inspect a template:
 
@@ -81,30 +106,45 @@ Validate an output document:
 py scripts\validate_docx.py --docx path\to\output.docx --output path\to\validation_report.md
 ```
 
-## Required behavior
+## Required Behavior
 
-- Prefer template styles and page setup over hard-coded formatting.
-- For official-document formatting, default to `assets/base-official-template.docx` unless the user explicitly provides a verified official template.
-- Do not use an arbitrary content document as the template just because it is `.docx`; inspect it first and reject it if page setup, required styles, odd/even footer settings, or page-number alignment are wrong.
-- Use fallback rules only when a required style is missing.
-- When the user changes default formatting, edit the machine-readable JSON block in `references/format_rules.md`, then regenerate the document.
-- Keep all Python and Markdown files UTF-8.
+- Prefer selected profile rules over global defaults.
+- Prefer approved profile templates over arbitrary `.docx` files.
+- For general official documents, default to `profiles/general_official/` and `assets/base-official-template.docx`.
+- Do not use an arbitrary content document as the template just because it is `.docx`; inspect it first.
+- When the user changes formatting for a profile, update the profile config first. If the current generator still reads `references/format_rules.md`, keep that file in sync until profile-aware script support is implemented.
+- Keep all Python, Markdown, and JSON files UTF-8.
 - Use `pathlib.Path` for paths, especially Chinese paths and filenames.
 - Do not use `.doc` as the working template. Convert `.doc` to `.docx` first.
-- Generate with `python-docx`; use Word COM only for conversion, PDF export, or Word-engine verification.
-- Reopen the generated `.docx` and verify style usage, page setup, `firstLineChars`, and odd/even page footers before claiming completion.
-- Treat validation errors as blocking; do not deliver a document when `OK` is `False`.
+- Generate with `python-docx`; use Word COM only for conversion, PDF export, field/TOC updates, or Word-engine verification.
+- Reopen generated `.docx` and verify styles, page setup, indentation, page footers, tables, and profile-specific requirements before claiming completion.
+- Treat validation errors as blocking; do not deliver a final document when `OK` is `False`.
 
-## Default style names
+## Current Implementation Notes
 
-The scripts look for these preferred styles and fall back when missing:
+The current scripts are not yet fully profile-aware. They already support the `general_official` production path and can use a template plus `references/format_rules.md`. The profile directory is the design/configuration layer for expanding the skill without rewriting logic each time.
 
-- `公文标题`
-- `一级标题`
-- `二级标题`
-- `图题`
-- `表题`
-- `备注`
-- `Normal`
+Implemented or partially implemented today:
 
-If a template uses only Word built-in styles, the scripts use `Heading 1` to `Heading 3` and `Normal` as fallbacks.
+- Markdown/content normalization.
+- `.docx` template inspection.
+- Markdown to Word generation.
+- A4 official page setup via template/rules.
+- Title, level-1, level-2, body, figure caption, table caption, note, table body, and table header styles.
+- Character-based first-line indentation.
+- Odd/even official page-number validation for the base profile.
+- Word TOC field insertion for levels 1-2.
+- Optional Word COM field update.
+- Markdown tables to three-line Word tables with repeating header rows.
+- Inline image insertion and figure captions.
+- Validation reports.
+
+Planned profile-aware work:
+
+- Loading `profiles/<profile_id>/features.json` directly in scripts.
+- Loading profile `format_rules.json` directly in scripts.
+- Loading profile `validation_rules.json` directly in scripts.
+- Template-specific page number modes.
+- Software copyright cover/TOC/body structure.
+- Contract signature blocks, appendix rules, and clause numbering.
+- Dynamic table border modes per profile.

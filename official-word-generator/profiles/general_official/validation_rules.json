@@ -1,0 +1,32 @@
+{
+  "profile_id": "general_official",
+  "validation_rules_source": "../../references/validation_rules.md",
+  "required_styles": [
+    "公文标题",
+    "一级标题",
+    "二级标题",
+    "图题",
+    "表题",
+    "表格正文",
+    "表格表头",
+    "备注"
+  ],
+  "page_setup": {
+    "page_width_mm": 210,
+    "page_height_mm": 297,
+    "top_margin_mm": 37,
+    "bottom_margin_mm": 35,
+    "left_margin_mm": 27,
+    "right_margin_mm": 27,
+    "header_distance_mm": 15,
+    "footer_distance_mm": 28
+  },
+  "required_checks": [
+    "validation.basic_open",
+    "validation.required_styles",
+    "validation.page_setup",
+    "validation.indent_chars",
+    "validation.footer_page_number",
+    "validation.table_rules"
+  ]
+}

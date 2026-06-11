@@ -1,0 +1,64 @@
+{
+  "profile_id": "general_official",
+  "format_rules_source": "../../references/format_rules.md",
+  "page": {
+    "size": "A4",
+    "orientation": "portrait",
+    "margins_mm": {
+      "top": 37,
+      "bottom": 35,
+      "left": 27,
+      "right": 27
+    },
+    "header_distance_mm": 15,
+    "footer_distance_mm": 28
+  },
+  "styles": {
+    "title": {
+      "style_name": "公文标题",
+      "font": "方正小标宋简体",
+      "ascii_font": "Times New Roman",
+      "size_pt": 22,
+      "bold": false,
+      "alignment": "center",
+      "line_rule": "at_least",
+      "line_pt": 0,
+      "first_line_chars": 0
+    },
+    "body": {
+      "style_name": "Normal",
+      "font": "仿宋_GB2312",
+      "ascii_font": "Times New Roman",
+      "size_pt": 16,
+      "bold": false,
+      "alignment": "justify",
+      "line_rule": "exact",
+      "line_pt": 28,
+      "first_line_chars": 2
+    },
+    "level_1": {
+      "style_name": "一级标题",
+      "font": "黑体",
+      "ascii_font": "Times New Roman",
+      "size_pt": 16,
+      "bold": false,
+      "alignment": "left",
+      "line_rule": "exact",
+      "line_pt": 28,
+      "first_line_chars": 2,
+      "outline_level": 1
+    },
+    "level_2": {
+      "style_name": "二级标题",
+      "font": "楷体_GB2312",
+      "ascii_font": "Times New Roman",
+      "size_pt": 16,
+      "bold": false,
+      "alignment": "left",
+      "line_rule": "exact",
+      "line_pt": 28,
+      "first_line_chars": 2,
+      "outline_level": 2
+    }
+  }
+}

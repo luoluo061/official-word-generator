@@ -1,0 +1,35 @@
+{
+  "profile_id": "contract",
+  "status": "draft",
+  "page": {
+    "size": "A4",
+    "orientation": "portrait",
+    "margins_mm": {
+      "top": null,
+      "bottom": null,
+      "left": null,
+      "right": null
+    }
+  },
+  "structure": {
+    "toc": {
+      "enabled_by_default": false
+    },
+    "signature_block": "planned",
+    "appendix": "planned"
+  },
+  "styles": {
+    "title": {
+      "status": "planned",
+      "note": "Define after importing the approved contract template."
+    },
+    "body": {
+      "status": "planned",
+      "note": "Define after importing the approved contract template."
+    },
+    "clause_heading": {
+      "status": "planned",
+      "note": "Contract clause numbering should be handled by template/profile rules, not hard-coded in SKILL.md."
+    }
+  }
+}

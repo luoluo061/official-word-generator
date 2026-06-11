@@ -1,0 +1,32 @@
+{
+  "profile_id": "contract",
+  "display_name": "合同",
+  "template": "template_placeholder.md",
+  "features": {
+    "page.a4_portrait": { "enabled": true, "overridable": true },
+    "page.profile_margins": { "enabled": true, "overridable": true },
+    "paragraph.body_style": { "enabled": true, "overridable": true },
+    "paragraph.fixed_line_spacing": { "enabled": true, "overridable": true },
+    "font.east_asia_ascii_split": { "enabled": true, "overridable": true },
+    "font.profile_style_rules": { "enabled": true, "overridable": true },
+    "heading.level_1": { "enabled": true, "overridable": true },
+    "heading.level_2": { "enabled": true, "overridable": true },
+    "heading.profile_numbering": { "enabled": true, "overridable": true },
+    "toc.insert_field": { "enabled": false, "overridable": true },
+    "page_number.centered": { "enabled": true, "overridable": true },
+    "header.profile_text": { "enabled": false, "overridable": true },
+    "footer.profile_text": { "enabled": false, "overridable": true },
+    "table.markdown_to_word": { "enabled": true, "overridable": true },
+    "table.profile_borders": { "enabled": false, "overridable": true },
+    "table.cell_style": { "enabled": true, "overridable": true },
+    "structure.signature_block": { "enabled": true, "overridable": true },
+    "structure.appendix": { "enabled": true, "overridable": true },
+    "content.normalize_text": { "enabled": true, "overridable": false },
+    "content.markdown_structure": { "enabled": true, "overridable": true },
+    "content.profile_outline": { "enabled": false, "overridable": true },
+    "validation.basic_open": { "enabled": true, "overridable": false },
+    "validation.required_styles": { "enabled": true, "overridable": true },
+    "validation.profile_rules": { "enabled": false, "overridable": true },
+    "validation.visual_review": { "enabled": true, "overridable": false }
+  }
+}

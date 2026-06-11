@@ -1,0 +1,19 @@
+{
+  "profile_id": "software_copyright",
+  "status": "draft",
+  "required_checks": [
+    "validation.basic_open",
+    "validation.required_styles",
+    "validation.profile_rules",
+    "validation.visual_review"
+  ],
+  "planned_checks": [
+    "cover exists when structure.cover is enabled",
+    "TOC exists when toc.insert_field is enabled",
+    "body starts after cover and TOC",
+    "images are not missing",
+    "figure captions are present when images exist",
+    "tables use the selected profile table style",
+    "page numbers follow the profile rule"
+  ]
+}

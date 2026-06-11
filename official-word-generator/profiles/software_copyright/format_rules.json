@@ -1,0 +1,38 @@
+{
+  "profile_id": "software_copyright",
+  "status": "draft",
+  "page": {
+    "size": "A4",
+    "orientation": "portrait",
+    "margins_mm": {
+      "top": null,
+      "bottom": null,
+      "left": null,
+      "right": null
+    }
+  },
+  "structure": {
+    "cover": "planned",
+    "toc": {
+      "enabled_by_default": true,
+      "levels": "1-2"
+    },
+    "body_starts_new_page": true
+  },
+  "styles": {
+    "title": {
+      "status": "planned",
+      "note": "Define after importing the official software copyright template."
+    },
+    "body": {
+      "status": "planned",
+      "note": "Define after importing the official software copyright template."
+    },
+    "level_1": {
+      "status": "planned"
+    },
+    "level_2": {
+      "status": "planned"
+    }
+  }
+}

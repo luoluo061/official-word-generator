@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-06-11 Profile Validation
+
+- Added `scripts/validate_profile.py` for profile configuration integrity checks.
+- Added production/draft/planned delivery gates for profile validation.
+- Updated profile inspection, development guide, and skill instructions to require profile validation before production promotion.
+
 ## 2026-06-11 Profile Scaffolding
 
 - Added `scripts/list_features.py` to display the Word feature catalog by category/status/Markdown.

@@ -3,34 +3,189 @@
   "display_name": "一般公文",
   "template": "../../assets/base-official-template.docx",
   "features": {
-    "page.a4_portrait": { "enabled": true, "overridable": true },
-    "page.official_margins": { "enabled": true, "overridable": true },
-    "paragraph.body_style": { "enabled": true, "overridable": true },
-    "paragraph.first_line_chars": { "enabled": true, "overridable": true },
-    "paragraph.fixed_line_spacing": { "enabled": true, "overridable": true },
-    "font.east_asia_ascii_split": { "enabled": true, "overridable": true },
-    "heading.level_1": { "enabled": true, "overridable": true },
-    "heading.level_2": { "enabled": true, "overridable": true },
-    "heading.level_3": { "enabled": false, "overridable": true },
-    "heading.level_4": { "enabled": false, "overridable": true },
-    "toc.insert_field": { "enabled": false, "overridable": true },
-    "toc.level_1_2": { "enabled": false, "overridable": true },
-    "toc.page_breaks": { "enabled": false, "overridable": true },
-    "page_number.odd_even_official": { "enabled": true, "overridable": true },
-    "table.markdown_to_word": { "enabled": true, "overridable": true },
-    "table.three_line": { "enabled": true, "overridable": true },
-    "table.header_repeat": { "enabled": true, "overridable": true },
-    "table.cell_style": { "enabled": true, "overridable": true },
-    "image.insert_inline": { "enabled": true, "overridable": true },
-    "image.center": { "enabled": true, "overridable": true },
-    "caption.figure": { "enabled": true, "overridable": true },
-    "content.normalize_text": { "enabled": true, "overridable": false },
-    "content.markdown_structure": { "enabled": true, "overridable": true },
-    "validation.basic_open": { "enabled": true, "overridable": false },
-    "validation.required_styles": { "enabled": true, "overridable": true },
-    "validation.page_setup": { "enabled": true, "overridable": true },
-    "validation.indent_chars": { "enabled": true, "overridable": true },
-    "validation.footer_page_number": { "enabled": true, "overridable": true },
-    "validation.table_rules": { "enabled": true, "overridable": true }
-  }
+    "page.a4_portrait": {
+      "enabled": true,
+      "overridable": true
+    },
+    "page.official_margins": {
+      "enabled": true,
+      "overridable": true
+    },
+    "paragraph.body_style": {
+      "enabled": true,
+      "overridable": true
+    },
+    "paragraph.first_line_chars": {
+      "enabled": true,
+      "overridable": true
+    },
+    "paragraph.fixed_line_spacing": {
+      "enabled": true,
+      "overridable": true
+    },
+    "font.east_asia_ascii_split": {
+      "enabled": true,
+      "overridable": true
+    },
+    "heading.level_1": {
+      "enabled": true,
+      "overridable": true
+    },
+    "heading.level_2": {
+      "enabled": true,
+      "overridable": true
+    },
+    "heading.level_3": {
+      "enabled": false,
+      "overridable": true
+    },
+    "heading.level_4": {
+      "enabled": false,
+      "overridable": true
+    },
+    "toc.insert_field": {
+      "enabled": false,
+      "overridable": true
+    },
+    "toc.level_1_2": {
+      "enabled": false,
+      "overridable": true
+    },
+    "toc.page_breaks": {
+      "enabled": false,
+      "overridable": true
+    },
+    "page_number.odd_even_official": {
+      "enabled": true,
+      "overridable": true
+    },
+    "table.markdown_to_word": {
+      "enabled": true,
+      "overridable": true
+    },
+    "table.three_line": {
+      "enabled": true,
+      "overridable": true
+    },
+    "table.header_repeat": {
+      "enabled": true,
+      "overridable": true
+    },
+    "table.cell_style": {
+      "enabled": true,
+      "overridable": true
+    },
+    "image.insert_inline": {
+      "enabled": true,
+      "overridable": true
+    },
+    "image.center": {
+      "enabled": true,
+      "overridable": true
+    },
+    "caption.figure": {
+      "enabled": true,
+      "overridable": true
+    },
+    "content.normalize_text": {
+      "enabled": true,
+      "overridable": false
+    },
+    "content.markdown_structure": {
+      "enabled": true,
+      "overridable": true
+    },
+    "validation.basic_open": {
+      "enabled": true,
+      "overridable": false
+    },
+    "validation.required_styles": {
+      "enabled": true,
+      "overridable": true
+    },
+    "validation.page_setup": {
+      "enabled": true,
+      "overridable": true
+    },
+    "validation.indent_chars": {
+      "enabled": true,
+      "overridable": true
+    },
+    "validation.footer_page_number": {
+      "enabled": true,
+      "overridable": true
+    },
+    "validation.table_rules": {
+      "enabled": true,
+      "overridable": true
+    }
+  },
+  "status": "production",
+  "is_reference": true,
+  "enabled_features": [
+    "caption.figure",
+    "content.markdown_structure",
+    "content.normalize_text",
+    "font.east_asia_ascii_split",
+    "heading.level_1",
+    "heading.level_2",
+    "image.center",
+    "image.insert_inline",
+    "page.a4_portrait",
+    "page.official_margins",
+    "page_number.odd_even_official",
+    "paragraph.body_style",
+    "paragraph.first_line_chars",
+    "paragraph.fixed_line_spacing",
+    "table.cell_style",
+    "table.header_repeat",
+    "table.markdown_to_word",
+    "table.three_line",
+    "validation.basic_open",
+    "validation.footer_page_number",
+    "validation.indent_chars",
+    "validation.page_setup",
+    "validation.required_styles",
+    "validation.table_rules"
+  ],
+  "disabled_features": [
+    "heading.level_3",
+    "heading.level_4",
+    "toc.insert_field",
+    "toc.level_1_2",
+    "toc.page_breaks"
+  ],
+  "overridable_features": [
+    "caption.figure",
+    "content.markdown_structure",
+    "font.east_asia_ascii_split",
+    "heading.level_1",
+    "heading.level_2",
+    "heading.level_3",
+    "heading.level_4",
+    "image.center",
+    "image.insert_inline",
+    "page.a4_portrait",
+    "page.official_margins",
+    "page_number.odd_even_official",
+    "paragraph.body_style",
+    "paragraph.first_line_chars",
+    "paragraph.fixed_line_spacing",
+    "table.cell_style",
+    "table.header_repeat",
+    "table.markdown_to_word",
+    "table.three_line",
+    "toc.insert_field",
+    "toc.level_1_2",
+    "toc.page_breaks",
+    "validation.footer_page_number",
+    "validation.indent_chars",
+    "validation.page_setup",
+    "validation.required_styles",
+    "validation.table_rules"
+  ],
+  "planned_features": [
+    "heading.level_3",
+    "heading.level_4"
+  ]
 }

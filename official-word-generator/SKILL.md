@@ -37,6 +37,14 @@ When the user asks to add a new template:
 4. Use `scripts/create_profile.py` rather than manually creating a profile directory.
 5. Planned features cannot be treated as production delivery capabilities.
 6. A production profile must include an approved template, `features.json`, `format_rules.json`, `validation_rules.json`, `example.md`, and `expected_validation_report.md`.
+7. Run `scripts/validate_profile.py` before inspecting, generating, or promoting a profile.
+
+When the user asks to upgrade a profile to production:
+
+- Run `py scripts\validate_profile.py --profile <profile_id>` first.
+- If `OK: False`, do not mark the profile as production.
+- Planned features cannot be delivered as production capabilities.
+- Partial features require explicit review and should not be production-critical unless covered by manual verification.
 
 Profile status rules:
 
@@ -103,6 +111,13 @@ Create a draft profile from the reference profile:
 
 ```powershell
 py scripts\create_profile.py --profile project_application --name 项目申报书 --from general_official
+```
+
+Validate profile configuration:
+
+```powershell
+py scripts\validate_profile.py --profile general_official
+py scripts\validate_profile.py --all
 ```
 
 Install or verify dependencies:

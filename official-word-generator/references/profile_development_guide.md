@@ -217,7 +217,23 @@ It should cover:
 
 This example is the regression input for future changes.
 
-## 11. Run inspect / generate / validate
+## 11. Validate profile configuration
+
+Before inspecting or generating Word output, validate profile configuration:
+
+```powershell
+py scripts\validate_profile.py --profile <profile_id>
+```
+
+Validate all profiles:
+
+```powershell
+py scripts\validate_profile.py --all
+```
+
+If `OK: False`, fix `blocking_errors` before continuing. Warnings may be acceptable for draft profiles, but must be reviewed before production.
+
+## 12. Run inspect / generate / validate document
 
 List profiles:
 
@@ -249,11 +265,12 @@ Save the accepted report as:
 profiles/<profile_id>/expected_validation_report.md
 ```
 
-## 12. Promote draft to production
+## 13. Promote draft to production
 
 A profile may be promoted from `draft` to `production` only when all conditions are met:
 
 - It has an approved `template.docx` or approved stable template path.
+- `validate_profile.py --profile <profile_id>` reports `OK: True`.
 - `profile_resolver.py --profile <profile_id> --inspect` passes.
 - `generate_docx.py --profile <profile_id>` succeeds with `example.md`.
 - `validate_docx.py --profile <profile_id>` reports `OK: True`.

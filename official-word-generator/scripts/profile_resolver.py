@@ -215,6 +215,9 @@ def print_inspection(profile_id: str) -> None:
     for status in ("implemented", "partial", "planned", "unknown"):
         values = info["feature_summary"].get(status, [])
         print(f"- {status}: {', '.join(values) if values else 'none'}")
+    print("")
+    print("For full profile validation, run:")
+    print(f"py scripts\\validate_profile.py --profile {profile_id}")
 
 
 def main() -> None:

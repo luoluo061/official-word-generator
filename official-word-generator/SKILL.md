@@ -29,6 +29,15 @@ Before adding a new profile or changing profile behavior, read `references/featu
 
 When adding a new template/profile, first read `references/profile_development_guide.md` and use `profiles/general_official/` as the reference production profile. The new profile must include the same core file structure, including `example.md` and `expected_validation_report.md`, before it can be treated as production-ready.
 
+When the user asks to add a new template:
+
+1. First show or generate the Word feature capability list from `references/feature_catalog.md`.
+2. Do not hard-code template capabilities; select existing `feature_id` values.
+3. If the user has not specified exact features, create a draft profile from `general_official` and generate `feature_selection.md` for confirmation.
+4. Use `scripts/create_profile.py` rather than manually creating a profile directory.
+5. Planned features cannot be treated as production delivery capabilities.
+6. A production profile must include an approved template, `features.json`, `format_rules.json`, `validation_rules.json`, `example.md`, and `expected_validation_report.md`.
+
 Profile status rules:
 
 - `production`: Can be used for formal generation and delivery after validation passes.
@@ -79,6 +88,21 @@ Inspect a profile:
 
 ```powershell
 py scripts\profile_resolver.py --profile general_official --inspect
+```
+
+List Word features:
+
+```powershell
+py scripts\list_features.py
+py scripts\list_features.py --category table
+py scripts\list_features.py --status implemented
+py scripts\list_features.py --markdown
+```
+
+Create a draft profile from the reference profile:
+
+```powershell
+py scripts\create_profile.py --profile project_application --name 项目申报书 --from general_official
 ```
 
 Install or verify dependencies:

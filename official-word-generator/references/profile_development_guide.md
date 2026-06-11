@@ -8,7 +8,25 @@ The reference production profile is:
 
 Do not start a new profile from an empty folder. Copy the reference structure first, then adapt it.
 
-## 1. Choose `profile_id`
+## 1. Review the Word feature catalog
+
+Before creating a profile, list the current Word capability pool:
+
+```powershell
+py scripts\list_features.py
+```
+
+Useful filters:
+
+```powershell
+py scripts\list_features.py --category table
+py scripts\list_features.py --status implemented
+py scripts\list_features.py --markdown
+```
+
+All profile features must reference `feature_id` values from `references/feature_catalog.md`. Do not invent template behavior from memory.
+
+## 2. Choose `profile_id`
 
 Use a stable lowercase snake_case id:
 
@@ -21,7 +39,34 @@ The folder must be:
 profiles/<profile_id>/
 ```
 
-## 2. Copy the reference structure
+## 3. Create the draft profile scaffold
+
+Use the scaffold command instead of manually creating folders:
+
+```powershell
+py scripts\create_profile.py --profile <profile_id> --name <中文名称> --from general_official
+```
+
+Example:
+
+```powershell
+py scripts\create_profile.py --profile project_application --name 项目申报书 --from general_official
+```
+
+The command creates a draft profile with:
+
+```text
+profile.md
+features.json
+format_rules.json
+validation_rules.json
+template_placeholder.md
+example.md
+expected_validation_report.md
+feature_selection.md
+```
+
+## 4. Copy/reference structure
 
 Start from:
 
@@ -39,17 +84,26 @@ validation_rules.json
 template.docx or template_placeholder.md
 example.md
 expected_validation_report.md
+feature_selection.md
 ```
 
 If the profile does not yet have an approved Word template, keep it as `draft` and use `template_placeholder.md`.
 
-## 3. Select features from `feature_catalog.md`
+## 5. Select features from `feature_selection.md`
 
 Read:
 
 ```text
 references/feature_catalog.md
 ```
+
+`feature_selection.md` is generated from `feature_catalog.md` and grouped by feature category. It is a human/Codex review checklist, not a replacement for `features.json`.
+
+Checklist rules:
+
+- `[x]` implemented features may be enabled.
+- partial features are marked "可启用但需复核".
+- planned features are not checked by default and cannot be used as production delivery capabilities.
 
 For every required capability, reference its existing `feature_id`. Do not invent feature ids in `features.json` before adding them to the catalog.
 
@@ -61,7 +115,7 @@ Feature status meanings:
 
 Do not mark a profile as `production` if it depends on `planned` features for formal delivery.
 
-## 4. Configure `features.json`
+## 6. Configure `features.json`
 
 `features.json` declares which capabilities the profile enables.
 
@@ -71,6 +125,8 @@ Rules:
 - Set `template` to `template.docx` or a relative approved template path.
 - Keep placeholder profiles as draft by pointing to `template_placeholder.md`.
 - Use only feature ids from `feature_catalog.md`.
+- Keep compatibility with `profile_resolver.py` by preserving the `features` mapping.
+- The scaffold also includes `enabled_features`, `disabled_features`, `overridable_features`, and `planned_features` for easier review.
 - For every feature, set:
   - `enabled`
   - `overridable`
@@ -90,7 +146,7 @@ Example:
 }
 ```
 
-## 5. Configure `format_rules.json`
+## 7. Configure `format_rules.json`
 
 `format_rules.json` records page and style expectations for the profile.
 
@@ -105,7 +161,7 @@ Include:
 
 If the current generator cannot consume a profile-specific rule yet, still document it here and mark the related feature as `partial` or `planned` in the catalog.
 
-## 6. Configure `validation_rules.json`
+## 8. Configure `validation_rules.json`
 
 `validation_rules.json` declares what must be checked before delivery.
 
@@ -127,7 +183,7 @@ Use implemented validation features when possible:
 
 If a profile needs rules that are not implemented, keep it as `draft`.
 
-## 7. Prepare `template.docx`
+## 9. Prepare `template.docx`
 
 Before using a template in production:
 
@@ -146,7 +202,7 @@ py scripts\inspect_template.py --template profiles\<profile_id>\template.docx --
 
 Do not use a content document as a template without inspection.
 
-## 8. Prepare `example.md`
+## 10. Prepare `example.md`
 
 Every profile needs a representative Markdown example.
 
@@ -161,7 +217,7 @@ It should cover:
 
 This example is the regression input for future changes.
 
-## 9. Run inspect / generate / validate
+## 11. Run inspect / generate / validate
 
 List profiles:
 
@@ -193,7 +249,7 @@ Save the accepted report as:
 profiles/<profile_id>/expected_validation_report.md
 ```
 
-## 10. Promote draft to production
+## 12. Promote draft to production
 
 A profile may be promoted from `draft` to `production` only when all conditions are met:
 

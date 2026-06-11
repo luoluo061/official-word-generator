@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-06-11 Profile Scaffolding
+
+- Added `scripts/list_features.py` to display the Word feature catalog by category/status/Markdown.
+- Added `scripts/create_profile.py` to scaffold draft profiles from `general_official`.
+- Updated the profile development guide and skill instructions for feature-selection-first profile creation.
+
 ## 2026-06-11 Reference Profile
 
 - Promoted `profiles/general_official/` as the reference production profile.

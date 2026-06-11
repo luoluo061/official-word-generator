@@ -62,7 +62,7 @@ DEFAULT_RULES = {
     "styles": {
         "title": {"style_name": "公文标题", "east_asia": FONT_TITLE, "ascii": FONT_ASCII, "size_pt": 22, "bold": False, "first_line_chars": 0, "align": "center", "line_rule": "at_least", "line_pt": 0},
         "body": {"style_name": "Normal", "east_asia": FONT_BODY, "ascii": FONT_ASCII, "size_pt": 16, "bold": False, "first_line_chars": 2, "align": "justify", "line_rule": "exact", "line_pt": 28},
-        "h1": {"style_name": "一级标题", "east_asia": FONT_HEI, "ascii": FONT_ASCII, "size_pt": 16, "bold": True, "first_line_chars": 2, "align": "left", "line_rule": "exact", "line_pt": 28, "outline_level": 0},
+        "h1": {"style_name": "一级标题", "east_asia": FONT_HEI, "ascii": FONT_ASCII, "size_pt": 16, "bold": False, "first_line_chars": 2, "align": "left", "line_rule": "exact", "line_pt": 28, "outline_level": 0},
         "h2": {"style_name": "二级标题", "east_asia": FONT_L2, "ascii": FONT_ASCII, "size_pt": 16, "bold": False, "first_line_chars": 2, "align": "left", "line_rule": "exact", "line_pt": 28, "outline_level": 1},
         "figure_caption": {"style_name": "图题", "east_asia": FONT_BODY, "ascii": FONT_ASCII, "size_pt": 16, "bold": False, "first_line_chars": 0, "align": "center", "line_rule": "exact", "line_pt": 28},
         "table_caption": {"style_name": "表题", "east_asia": FONT_BODY, "ascii": FONT_ASCII, "size_pt": 16, "bold": False, "first_line_chars": 0, "align": "center", "line_rule": "exact", "line_pt": 28},

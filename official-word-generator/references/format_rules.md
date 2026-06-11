@@ -56,7 +56,7 @@
 - Word 样式：`一级标题`
 - 字体：黑体
 - 字号：3号 / 16 磅
-- 加粗：是
+- 加粗：否
 - 对齐：左对齐
 - 首行缩进：2 字符
 - 段前段后：0
@@ -208,7 +208,7 @@
       "east_asia": "黑体",
       "ascii": "Times New Roman",
       "size_pt": 16,
-      "bold": true,
+      "bold": false,
       "first_line_chars": 2,
       "align": "left",
       "line_rule": "exact",

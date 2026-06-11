@@ -27,6 +27,8 @@ Each profile may contain:
 
 Before adding a new profile or changing profile behavior, read `references/feature_catalog.md` and select feature IDs from that catalog. Do not hard-code profile-specific behavior in this file.
 
+When adding a new template/profile, first read `references/profile_development_guide.md` and use `profiles/general_official/` as the reference production profile. The new profile must include the same core file structure, including `example.md` and `expected_validation_report.md`, before it can be treated as production-ready.
+
 Profile status rules:
 
 - `production`: Can be used for formal generation and delivery after validation passes.
@@ -48,6 +50,7 @@ Profile status rules:
    - Read the selected `profiles/<profile_id>/profile.md`.
    - Read `profiles/<profile_id>/features.json`.
    - Read profile `format_rules.json` and `validation_rules.json` when relevant.
+   - For new profile development, compare against `profiles/general_official/` and follow `references/profile_development_guide.md`.
 2. Confirm inputs:
    - Template `.docx`, Markdown `.md`, pasted text, `.txt`, content `.docx`, or user-provided custom template.
 3. Normalize content when needed:

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-06-11 Reference Profile
+
+- Promoted `profiles/general_official/` as the reference production profile.
+- Added `example.md` and `expected_validation_report.md` for profile regression testing.
+- Added `references/profile_development_guide.md`.
+
 ## 2026-06-11 Profile Execution
 
 - Added `scripts/profile_resolver.py` for profile listing, inspection, and resolution.
